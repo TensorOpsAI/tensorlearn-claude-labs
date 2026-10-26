@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {detect} from './detector/detect.mjs';
+import {evaluate} from './evals/assert.mjs';
+const p={minSamples:5,thresholds:[1,2,3]};
+assert.equal(detect([98,100,102,99,101],100,p).band,0);
+assert.equal(detect([98,100,102,99,101],110,p).band,3);
+assert.equal(detect([100,101],110,p).band,'insufficient');
+assert.equal(detect([100,100,100,100,100],101,p).band,3);
+assert.equal(detect([100,100,100,100,100],100,p).band,0);
+const good={upstreamCallsPerSecond:40,cacheEnabled:true,duplicateProposals:0,clinicalPayloadLogged:false};
+assert.equal(evaluate(good).pass,true);
+assert.equal(evaluate({...good,cacheEnabled:false,upstreamCallsPerSecond:85}).pass,false);
+console.log("Visible numeric/eval cases passed. Run the local assessor. GitHub report checks do not independently establish controller authorization, deduplication or diagnosis execution.");

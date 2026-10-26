@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {getClaim} from './src/claims.mjs';
+const own={id:'claim-A',ownerId:'user-42',status:'pending'};
+assert.deepEqual(getClaim([own],'user-42','claim-A'),own);
+assert.equal(getClaim([own],'user-4','claim-A'),null,'A prefix is not an authorized owner');
+assert.equal(getClaim([own],'','claim-A'),null,'Blank viewer IDs are invalid');
+assert.equal(getClaim([own],42,'claim-A'),null,'Do not coerce non-string IDs');
+assert.equal(getClaim([own],' user-42 ',' claim-A '),own);
+assert.equal(getClaim(null,'user-42','claim-A'),null);
+console.log('Visible functional cases passed. Official grading also reruns your tests against the original starter.');
