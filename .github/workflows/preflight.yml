@@ -8,9 +8,10 @@ on:
 permissions:
   contents: read
   pull-requests: read
+  id-token: write
 jobs:
   grade:
-    uses: TensorOpsAI/tensorlearn-claude-graders/.github/workflows/grade.yml@76fd4bb40ef1d7b212b3d1172a613ba665a75343
+    uses: TensorOpsAI/tensorlearn-claude-graders/.github/workflows/grade.yml@e2a2ce8b5e9883bae2547907292b26cf8e283aaf
     with:
-      grader-sha: 76fd4bb40ef1d7b212b3d1172a613ba665a75343
+      grader-sha: e2a2ce8b5e9883bae2547907292b26cf8e283aaf
       exercise-key: preflight
