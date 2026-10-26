@@ -1,6 +1,6 @@
-export function getClaim(claims,viewerId,claimId) {
- const id=x=>typeof x==='string'&&x.trim()?x.trim():null;
- const viewer=id(viewerId), target=id(claimId);
- if(!Array.isArray(claims)||!viewer||!target)return null;
- return claims.find(x=>x&&id(x.id)===target&&id(x.ownerId)===viewer)??null;
+// Contract: docs/contract.md. Pure function; do not mutate claims.
+export function getClaim(claims, viewerId, claimId) {
+  const target = String(claimId ?? '').trim();
+  const viewer = String(viewerId ?? '').trim();
+  return claims.find(claim => String(claim.id).trim() === target && String(claim.ownerId).trim().startsWith(viewer)) ?? null;
 }
