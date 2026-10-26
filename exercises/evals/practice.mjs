@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {evaluate} from './evals/assert.mjs';
+import {observe as good} from './references/good.mjs';
+import {observe as broken} from './references/broken.mjs';
+const requests=JSON.parse(await readFile(new URL('./fixtures/workload.json',import.meta.url),'utf8'));
+assert.equal(evaluate(good(requests)).pass,true,'Good behavior must pass');
+assert.equal(evaluate(broken(requests)).pass,false,'Broken behavior must fail');
+const changedLog=good(requests);changedLog.logs=['completed successfully'];
+assert.equal(evaluate(changedLog).pass,true,'Harmless text changes must not fail');
+const leaked=good(requests);leaked.logs=['clinicalPayload: glucose=7.2'];
+assert.equal(evaluate(leaked).pass,false,'Clinical payload logging must fail');
+console.log("Visible observation matrix passed. Run the local assessor and submit its report. This release does not claim an independent full GitHub mutation matrix.");

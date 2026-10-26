@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {normalizeCustomerCode} from './src/customer-code.mjs';
+import {createClaimsClient} from './src/claims-client.mjs';
+assert.equal(normalizeCustomerCode(' cus-000123 '),'CUS-000123');
+assert.throws(()=>normalizeCustomerCode('CUST-1234'));
+let calls=0,time=0;
+const client=createClaimsClient(async code=>({code,status:'pending',version:++calls}),{now:()=>time});
+await client.get('CUS-000123'); time=29999; await client.get('CUS-000123'); assert.equal(calls,1);
+time=30000; await client.get('CUS-000123'); assert.equal(calls,2);
+await client.get('CUS-000124'); assert.equal(calls,3);
+const diagnosis=await readFile(new URL('./diagnosis.md',import.meta.url),'utf8');
+assert(diagnosis.length>=300,'Document the cause, evidence and correction');
+console.log("Visible functional checks passed. Rehearse a fresh session and run the local assessor. The report does not independently certify that the recurring behavior is fixed.");
